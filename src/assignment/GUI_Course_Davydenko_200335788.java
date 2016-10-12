@@ -2,7 +2,7 @@ package assignment;
 
 import java.util.Collection;
 
-public class GUI_Table_Davydenko_200335788 {
+public class GUI_Course_Davydenko_200335788{
 
     private String courseName;
     private String courseCode;
@@ -10,7 +10,7 @@ public class GUI_Table_Davydenko_200335788 {
     private Integer grade;
     private String letterGrade;
 
-    public GUI_Table_Davydenko_200335788() {
+    public GUI_Course_Davydenko_200335788() {
         this.courseName = "";
         this.courseCode = "";
         this.instructor = "";
@@ -18,13 +18,13 @@ public class GUI_Table_Davydenko_200335788 {
         this.letterGrade = "";
     }
 
-    public GUI_Table_Davydenko_200335788(String courseName, String courseCode, 
-            String instructor, Integer grade, String letterGrade) {
+    public GUI_Course_Davydenko_200335788(String courseName, String courseCode, 
+            String instructor, Integer grade) {
         this.courseName = courseName;
         this.courseCode = courseCode;
         this.instructor = instructor;
         this.grade = grade;
-        this.letterGrade = letterGrade;
+        this.letterGrade = GUI_Code_Davydenko_200335788.getLetterGrades(grade);
     }
 
     public String getCourseName() {

@@ -24,11 +24,10 @@ public class GUI_Code_Davydenko_200335788 extends Application {
     Stage window;
     Button buttonAdd;
     Button buttonDelete;
-    TableView<GUI_Table_Davydenko_200335788> table;
+    TableView<GUI_Course_Davydenko_200335788> table;
     TextField courseName, courseCode, instructor, grade;
     Label labelOverallAverageGrade;
     List<Integer> list = new ArrayList<>();
-    
 
     public static void main(String[] args) {
         launch(args);
@@ -64,26 +63,21 @@ public class GUI_Code_Davydenko_200335788 extends Application {
         grade = new TextField();
         grade.setPromptText("Grade");
         grade.setMinWidth(50);
-        
-
-        //overall average grade
-        labelOverallAverageGrade = new Label("The overall average mark is " + getAverageGrade()
-                + ", which is a letter grade of " + getLetterAverageGrade());
 
         //column in table
-        TableColumn<GUI_Table_Davydenko_200335788, String> courseNameColumn = new TableColumn<>("Course Name");
+        TableColumn<GUI_Course_Davydenko_200335788, String> courseNameColumn = new TableColumn<>("Course Name");
         courseNameColumn.setCellValueFactory(new PropertyValueFactory<>("courseName"));
 
-        TableColumn<GUI_Table_Davydenko_200335788, String> courseCodeColumn = new TableColumn<>("Course Code");
+        TableColumn<GUI_Course_Davydenko_200335788, String> courseCodeColumn = new TableColumn<>("Course Code");
         courseCodeColumn.setCellValueFactory(new PropertyValueFactory<>("courseCode"));
 
-        TableColumn<GUI_Table_Davydenko_200335788, String> instructorColumn = new TableColumn<>("Instructor");
+        TableColumn<GUI_Course_Davydenko_200335788, String> instructorColumn = new TableColumn<>("Instructor");
         instructorColumn.setCellValueFactory(new PropertyValueFactory<>("instructor"));
 
-        TableColumn<GUI_Table_Davydenko_200335788, Integer> gradeColumn = new TableColumn<>("Grade");
+        TableColumn<GUI_Course_Davydenko_200335788, Integer> gradeColumn = new TableColumn<>("Grade");
         gradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
 
-        TableColumn<GUI_Table_Davydenko_200335788, Integer> letterGradeColumn = new TableColumn<>("Letter Grade");
+        TableColumn<GUI_Course_Davydenko_200335788, Integer> letterGradeColumn = new TableColumn<>("Letter Grade");
         letterGradeColumn.setCellValueFactory(new PropertyValueFactory<>("letterGrade"));
 
         //create table
@@ -94,6 +88,10 @@ public class GUI_Code_Davydenko_200335788 extends Application {
         //action on button
         buttonAdd.setOnAction(e -> addButtonClicked());
         buttonDelete.setOnAction(e -> deleteButtonClicked());
+
+        labelOverallAverageGrade = new Label("");
+        labelOverallAverageGrade.setText("The overall average mark is " + getAverageGrade()
+                + ", which is a letter grade of " + getLetterAverageGrade());
 
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10, 10, 10, 10));
@@ -124,25 +122,16 @@ public class GUI_Code_Davydenko_200335788 extends Application {
         window.show();
     }
 
-    public ObservableList<GUI_Table_Davydenko_200335788> getInformation() {
-        ObservableList<GUI_Table_Davydenko_200335788> info = FXCollections.observableArrayList();
+    public ObservableList<GUI_Course_Davydenko_200335788> getInformation() {
+        ObservableList<GUI_Course_Davydenko_200335788> info = FXCollections.observableArrayList();
 
+        info.add(new GUI_Course_Davydenko_200335788("Programming Fundamentals", "COMP1030", "Jaret Wright", 100));
         return info;
-    }
-
-    private boolean isInt(TextField input, String message) {
-        try {
-            int grade = Integer.parseInt(input.getText());
-            return true;
-        } catch (NumberFormatException e) {
-            System.out.println("Error: " + message + " is not a number");
-            return false;
-        }
     }
 
     //Add button clicked
     public void addButtonClicked() {
-        GUI_Table_Davydenko_200335788 info = new GUI_Table_Davydenko_200335788();
+        GUI_Course_Davydenko_200335788 info = new GUI_Course_Davydenko_200335788();
         info.setCourseName(courseName.getText());
         info.setCourseCode(courseCode.getText());
         info.setInstructor(instructor.getText());
@@ -154,18 +143,25 @@ public class GUI_Code_Davydenko_200335788 extends Application {
         courseCode.clear();
         instructor.clear();
         grade.clear();
+        labelOverallAverageGrade.setText("The overall average mark is " + getAverageGrade()
+                + ", which is a letter grade of " + getLetterAverageGrade());
+        list.clear();
+        
     }
 
     //Delete button clicked
     public void deleteButtonClicked() {
-        ObservableList<GUI_Table_Davydenko_200335788> productSelected, allProducts;
+        ObservableList<GUI_Course_Davydenko_200335788> productSelected, allProducts;
         allProducts = table.getItems();
         productSelected = table.getSelectionModel().getSelectedItems();
-
+        labelOverallAverageGrade.setText("The overall average mark is " + getAverageGrade()
+                + ", which is a letter grade of " + getLetterAverageGrade());
+        list.clear();
+        
         productSelected.forEach(allProducts::remove);
     }
 
-    private static String getLetterGrades(double grade) {
+    public static String getLetterGrades(double grade) {
         String letterGrade;
         if (grade <= 100 && grade >= 80) {
             letterGrade = "A";
@@ -183,33 +179,33 @@ public class GUI_Code_Davydenko_200335788 extends Application {
         return letterGrade;
     }
 
-    private double getAverage(List <Integer> grade) {
+    private double getAverage(List<Integer> grade) {
         Integer num = 0;
-        if(!grade.isEmpty()) {
+        if (!grade.isEmpty()) {
             for (Integer mark : grade) {
                 num += mark;
             }
             double averageGrade = num.doubleValue() / grade.size();
             return averageGrade;
-          }
-          return num;
         }
-    
-    public String getAverageGrade(){
+        return num;
+    }
+
+    public String getAverageGrade() {
         list.clear();
         table.getItems().forEach(item -> list.add(item.getGrade()));
-        
+
         double averageGrade = getAverage(list);
         String pattern = "##0.0";
         DecimalFormat decimalFormat = new DecimalFormat(pattern);
         String formatAverageGrade = decimalFormat.format(averageGrade);
-        
-        return formatAverageGrade; 
+
+        return formatAverageGrade;
     }
-    
-    public String getLetterAverageGrade(){
-    String letterAverageGrade = getLetterGrades(getAverage(list));
-    
-    return letterAverageGrade;
+
+    public String getLetterAverageGrade() {
+        String letterAverageGrade = getLetterGrades(getAverage(list));
+
+        return letterAverageGrade;
     }
 }
